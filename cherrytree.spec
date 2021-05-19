@@ -1,12 +1,12 @@
 Summary:	A hierarchical note taking application
 Summary(pl.UTF-8):	Hierarchiczna aplikacja do robienia notatek
 Name:		cherrytree
-Version:	0.99.33
+Version:	0.99.37
 Release:	1
 License:	GPL v3+
 Group:		X11/Applications
 Source0:	https://www.giuspen.com/software/%{name}_%{version}.tar.xz
-# Source0-md5:	775de7a5a40eaee4df8794ffd1c7e303
+# Source0-md5:	dc85101eed66ccda364d1f2f7d9f4a05
 URL:		https://www.giuspen.com/cherrytree/
 BuildRequires:	curl-devel
 BuildRequires:	gspell-devel
@@ -56,6 +56,9 @@ rm -rf $RPM_BUILD_ROOT
 
 ## Remove old mime registration files
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/mime-info/cherrytree.*
+
+## Remove unsupported locale
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/kk_KZ
 
 %find_lang %{name}
 
