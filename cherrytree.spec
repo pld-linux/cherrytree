@@ -2,7 +2,7 @@ Summary:	A hierarchical note taking application
 Summary(pl.UTF-8):	Hierarchiczna aplikacja do robienia notatek
 Name:		cherrytree
 Version:	0.99.45
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		X11/Applications
 Source0:	https://www.giuspen.com/software/%{name}_%{version}.tar.xz
