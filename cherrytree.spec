@@ -2,27 +2,30 @@ Summary:	A hierarchical note taking application
 Summary(pl.UTF-8):	Hierarchiczna aplikacja do robienia notatek
 Name:		cherrytree
 Version:	1.1.4
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		X11/Applications
 Source0:	https://www.giuspen.com/software/%{name}_%{version}.tar.xz
 # Source0-md5:	2bf19e64d32314911c9416195476c4cb
 URL:		https://www.giuspen.com/cherrytree/
+BuildRequires:	cmake >= 3.5
 BuildRequires:	curl-devel
-BuildRequires:	gspell-devel
-BuildRequires:	gtkmm3-devel
-BuildRequires:	gtksourceviewmm3-devel
-BuildRequires:	libfmt-devel
-BuildRequires:	libxml++2-devel
-BuildRequires:	rpmbuild(macros) >= 1.596
+BuildRequires:	fribidi-devel
+BuildRequires:	glibmm-devel >= 2.4
+BuildRequires:	gspell-devel >= 1.0
+BuildRequires:	gtkmm3-devel >= 3.0
+BuildRequires:	gtksourceviewmm3-devel >= 3.0
+BuildRequires:	libfmt-devel >= 6.0
+# C++17
+BuildRequires:	libstdc++-devel >= 6:7
+BuildRequires:	libxml++2-devel >= 2.6
+BuildRequires:	pangomm-devel >= 1.4
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	shared-mime-info
 BuildRequires:	spdlog-devel >= 1:1.8.1
+BuildRequires:	sqlite3-devel >= 3
 BuildRequires:	uchardet-devel
 BuildRequires:	vte-devel
-Requires:	gspell
-Requires:	gtksourceviewmm3
-Requires:	libfmt
-Requires:	libxml++2
 Requires:	shared-mime-info
 Requires:	spdlog >= 1:1.8.1
 Suggests:	p7zip
@@ -52,14 +55,18 @@ cd build
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 ## Remove old mime registration files
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/mime-info/cherrytree.*
 
-## Remove unsupported locale
-%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/{hi_IN,kk_KZ,kk_LA}
+# unify locale dirs
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/{hi_IN,hi}
+%{__mv} $RPM_BUILD_ROOT%{_localedir}/{kk_KZ,kk}
+# should be kk@latin, but not supported
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/kk_LA
 
 %find_lang %{name}
 
@@ -78,13 +85,12 @@ desktop-file-validate $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 %update_icon_cache hicolor
 %update_mime_database
 
-
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc changelog.txt license.txt
 %attr(755,root,root) %{_bindir}/cherrytree
+%{_datadir}/cherrytree
 %{_datadir}/metainfo/net.giuspen.cherrytree.metainfo.xml
 %{_desktopdir}/cherrytree.desktop
-%{_datadir}/cherrytree/
 %{_iconsdir}/hicolor/scalable/apps/cherrytree.svg
 %{_mandir}/man1/cherrytree.1*
